@@ -37,3 +37,10 @@
     transform: translateY(0px);
   }
 }
+
+body{
+  background-image: url("library.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
