@@ -11,19 +11,13 @@ export default function Login() {
             <div className="wrapper">
                 <h1>Log In</h1>
                 <br />
-                {/*<label><b>Username</b></label>
+                <label><b>Username</b></label>
                 <input placeholder="Username..."></input>
                 <br />
                 <label><b>Password</b></label>
                 <input placeholder="Password..."></input>
                 <br />
-                <button onClick={handleSubmit} className="submitbtn">Submit</button>*/}
-                <form>
-                    <label>
-                        <b>Username</b>
-                        <input type="text" value={state.value} onChange={handleChange}/>
-                    </label>
-                </form>
+                <button onClick={handleSubmit} className="submitbtn">Submit</button>
             </div>
         </div>
     )
