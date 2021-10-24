@@ -1,27 +1,6 @@
 import './Login.css'
 import React, { Component } from 'react'
-
-{/*export default function Login() {
-    const handleSubmit = ()=>{
-        console.log("Hello")
-    }
-
-    return (
-        <div className = "loginContainer">
-            <div className="wrapper">
-                <h1>Log In</h1>
-                <br />
-                <label><b>Username</b></label>
-                <input placeholder="Username..."></input>
-                <br />
-                <label><b>Password</b></label>
-                <input placeholder="Password..."></input>
-                <br />
-                <button onClick={handleSubmit} className="submitbtn">Submit</button>
-            </div>
-        </div>
-    )
-}*/}
+import axios from 'axios';
 
 export default class Login extends Component {
 
@@ -30,6 +9,8 @@ export default class Login extends Component {
         this.state={
             username:'',
             password:'',
+            //for testing
+            userList: []
         }
     }
 
@@ -43,6 +24,20 @@ export default class Login extends Component {
     handleSubmit = (e) =>{
         e.preventDefault();
         console.log(this.state);
+        axios.post('http://localhost:3001/api/insert',{
+            username: this.state.username,
+            password: this.state.password,
+            firstName: "Alan",
+            lastName: "Hern",
+            email: "hp2"
+        }).then(()=>{
+            console.log('successful insert!')
+        })
+    }
+
+    componentDidUpdate(){
+        axios.get('http://localhost:3001/api/get').then((response)=>
+        this.state.userList = response.data)
     }
 
     render() {
@@ -71,6 +66,10 @@ export default class Login extends Component {
                     <button type="submit" 
                         onClick={this.handleSubmit}
                         className="submitbtn">Submit</button>
+                        {/* for testing */}
+                {userList.map((val)=>{
+                    return <h3>{val.username}, {val.password}, {val.firstName}, {val.lastName}, {val.email}</h3>
+                })}
                 </form>
             </div>
         </div>
