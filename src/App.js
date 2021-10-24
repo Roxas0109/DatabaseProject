@@ -6,7 +6,7 @@ import logo  from './ECSlogo.jpg';
 function App() {
   return (
     <div className="App">
-      <img src={logo} className="ECSlogo"/>
+      <img alt="ECS logo" src={logo} className="ECSlogo"/>
       <Login/>
     </div>
   );

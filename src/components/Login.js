@@ -35,9 +35,22 @@ export default class Login extends Component {
         })
     }
 
+    componentDidMount(){
+        axios.get('http://localhost:3001/api/get').then((response)=>{
+            //this.state.userList = response.data
+            this.setState({
+                userList: response.data
+            })
+        })
+    }
+
     componentDidUpdate(){
-        axios.get('http://localhost:3001/api/get').then((response)=>
-        this.state.userList = response.data)
+        axios.get('http://localhost:3001/api/get').then((response)=>{
+            //this.state.userList = response.data
+            this.setState({
+                userList: response.data
+            })
+        })
     }
 
     render() {
@@ -66,11 +79,11 @@ export default class Login extends Component {
                     <button type="submit" 
                         onClick={this.handleSubmit}
                         className="submitbtn">Submit</button>
-                        {/* for testing */}
-                {userList.map((val)=>{
+                </form>
+                {/* for testing */}
+                {this.state.userList.map((val)=>{
                     return <h3>{val.username}, {val.password}, {val.firstName}, {val.lastName}, {val.email}</h3>
                 })}
-                </form>
             </div>
         </div>
         )
