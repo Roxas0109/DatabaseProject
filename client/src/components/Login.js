@@ -25,7 +25,7 @@ export default class Login extends Component {
     handleSubmit = (e) =>{
         e.preventDefault();
         console.log(this.state);
-        axios.post('http://localhost:3001/api/insert',{
+        /*axios.post('http://localhost:3001/api/insert',{
             username: this.state.username,
             password: this.state.password,
             firstName: "Alan",
@@ -33,7 +33,7 @@ export default class Login extends Component {
             email: "hp2"
         }).then(()=>{
             console.log('successful insert!')
-        })
+        })*/
     }
 
     componentDidMount(){
@@ -57,39 +57,40 @@ export default class Login extends Component {
     render() {
         return (
             <div className = "loginContainer">
-            <div className="wrapper">
-                <h1>Log In</h1>
-                <br />
-                <form>
-                    <label><b>Username</b>
-                        <input type="text"
-                            name="username" 
-                            value={this.state.username} 
-                            onChange={this.handleChange} 
-                            placeholder="Username..."/>
-                    </label>
+                <div className="wrapper">
+                    <h1>Log In</h1>
                     <br />
-                    <label><b>Password</b>
-                        <input type="password" 
-                            name="password"
-                            value={this.state.password} 
-                            onChange={this.handleChange} 
-                            placeholder="Password..."/>
-                    </label>
-                    <br />
-                    <button type="submit" 
-                        onClick={this.handleSubmit}
-                        className="submitbtn">Submit</button>
-                </form>
-                <li>
-                    <Link to='/register'>Press Me!</Link>
-                </li>
-                {/* for testing */}
-                {this.state.userList.map((val)=>{
-                    return <h3>{val.username}, {val.password}, {val.firstName}, {val.lastName}, {val.email}</h3>
-                })}
+                    <form>
+                        <label><b>Username</b>
+                            <input type="text"
+                                name="username" 
+                                value={this.state.username} 
+                                onChange={this.handleChange} 
+                                placeholder="Username..."/>
+                        </label>
+                        <br />
+                        <label><b>Password</b>
+                            <input type="password" 
+                                name="password"
+                                value={this.state.password} 
+                                onChange={this.handleChange} 
+                                placeholder="Password..."/>
+                        </label>
+                        <br />
+                        <button type="submit" 
+                            onClick={this.handleSubmit}
+                            className="submitbtn">Submit</button>
+                    </form>
+                    <ul>
+                        <Link to='/register'>Register!</Link>
+                    </ul>
+                    {/* for testing */}
+                    <h3>Current Users</h3>
+                    {this.state.userList.map((val)=>{
+                        return <h4>{val.username}, {val.password}, {val.firstName}, {val.lastName}, {val.email}</h4>
+                    })}
+                </div>
             </div>
-        </div>
         )
     }
 }
