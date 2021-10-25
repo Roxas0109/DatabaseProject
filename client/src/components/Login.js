@@ -1,6 +1,7 @@
 import './Login.css'
 import React, { Component } from 'react'
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 export default class Login extends Component {
 
@@ -80,6 +81,9 @@ export default class Login extends Component {
                         onClick={this.handleSubmit}
                         className="submitbtn">Submit</button>
                 </form>
+                <li>
+                    <Link to='/register'>Press Me!</Link>
+                </li>
                 {/* for testing */}
                 {this.state.userList.map((val)=>{
                     return <h3>{val.username}, {val.password}, {val.firstName}, {val.lastName}, {val.email}</h3>
