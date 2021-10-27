@@ -9,20 +9,13 @@ import {
 import ShowData from './ShowData';
 
 export default function Initialize() {
-let match=useRouteMatch();
+    let match=useRouteMatch();
 
     return (
         <div className="loginContainer">
             <div className="wrapper">
-                {/* <h1>You're Logged in!</h1>
-                <br/>
-                <h2>Press Initialize to show database.</h2>
-                <br/>
-                <button className="btn">Initialize</button> */}
-            </div>
-
             <Switch>
-                <Route to={match.path}>
+                <Route exact path={match.path}>
                 <h1>You're Logged in!</h1>
                 <br/>
                 <h2>Press Initialize to show database.</h2>
@@ -31,10 +24,12 @@ let match=useRouteMatch();
                     <button className="btn">Initialize</button>
                 </Link>
                 </Route>
-                <Route to={`${match.path}/`}>
+
+                <Route path={`${match.path}/showdata`}>
                     <ShowData/>
                 </Route>
             </Switch>
+            </div>
 
         </div>
     )
