@@ -8,6 +8,7 @@ import {
   Route,
 } from 'react-router-dom'
 import Register from './components/Register';
+import Initialize from './components/Initialize';
 
 function App() {
   return (
@@ -21,6 +22,9 @@ function App() {
           </Route>
           <Route path='/register'>
             <Register/>
+          </Route>
+          <Route path='/initialize'>
+            <Initialize/>
           </Route>
         </Switch>
       </div>

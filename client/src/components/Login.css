@@ -18,7 +18,7 @@ label, input , button{
     margin: 5%;
 }
 
-.submitbtn {
+.btn {
     background-color: #D22030;
     border: none;
     border-radius: 5px;
@@ -28,7 +28,7 @@ label, input , button{
     padding: 2%;
   }
 
-.submitbtn:hover {
+.btn:hover {
 background-color: #555;
 color: white;
 }

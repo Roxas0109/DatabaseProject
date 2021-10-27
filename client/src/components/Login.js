@@ -25,6 +25,7 @@ export default class Login extends Component {
     handleSubmit = (e) =>{
         e.preventDefault();
         console.log(this.state);
+        <Link to ='/initialize'></Link>
         /*axios.post('http://localhost:3001/api/insert',{
             username: this.state.username,
             password: this.state.password,
@@ -36,23 +37,23 @@ export default class Login extends Component {
         })*/
     }
 
-    componentDidMount(){
-        axios.get('http://localhost:3001/api/get').then((response)=>{
-            //this.state.userList = response.data
-            this.setState({
-                userList: response.data
-            })
-        })
-    }
+    // componentDidMount(){
+    //     axios.get('http://localhost:3001/api/get').then((response)=>{
+    //         //this.state.userList = response.data
+    //         this.setState({
+    //             userList: response.data
+    //         })
+    //     })
+    // }
 
-    componentDidUpdate(){
-        axios.get('http://localhost:3001/api/get').then((response)=>{
-            //this.state.userList = response.data
-            this.setState({
-                userList: response.data
-            })
-        })
-    }
+    // componentDidUpdate(){
+    //     axios.get('http://localhost:3001/api/get').then((response)=>{
+    //         //this.state.userList = response.data
+    //         this.setState({
+    //             userList: response.data
+    //         })
+    //     })
+    // }
 
     render() {
         return (
@@ -77,18 +78,20 @@ export default class Login extends Component {
                                 placeholder="Password..."/>
                         </label>
                         <br />
+                        <Link to="/initialize">
                         <button type="submit" 
-                            onClick={this.handleSubmit}
-                            className="submitbtn">Submit</button>
+                            //onClick={this.handleSubmit}
+                            className="btn">Submit</button>
+                        </Link>
                     </form>
                     <ul>
                         <Link to='/register'>Register!</Link>
                     </ul>
-                    {/* for testing */}
+                    {/* for testing
                     <h3>Current Users</h3>
                     {this.state.userList.map((val)=>{
                         return <h4>{val.username}, {val.password}, {val.firstName}, {val.lastName}, {val.email}</h4>
-                    })}
+                    })} */}
                 </div>
             </div>
         )

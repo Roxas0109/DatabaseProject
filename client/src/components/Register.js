@@ -83,7 +83,7 @@ export default class Register extends Component {
                         <br />
                         <button type="submit" 
                             onClick={this.handleSubmit}
-                            className="submitbtn">Submit</button>
+                            className="btn">Submit</button>
                     </form>
                 </div>
             </div>
