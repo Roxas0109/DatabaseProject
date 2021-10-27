@@ -5,8 +5,8 @@ const app = express();
 const mysql = (require('mysql'));
 
 const db = mysql.createPool({
-    host: '127.0.0.1',
-    user: 'comp440',
+    host: 'comp440dbserver.mysql.database.azure.com',
+    user: 'comp440@comp440dbserver',
     password: 'pass1234',
     database: 'dbproject'
 });
