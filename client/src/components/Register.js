@@ -1,92 +1,84 @@
-import React, { Component } from 'react'
+import React, { useState } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
-export default class Register extends Component {
+export default function Register() {
 
-    constructor(props){
-        super(props);
-        this.state={
-            username:'',
-            password:'',
-            firstName:'',
-            lastName:'',
-            email:''
-        }
-    }
+    const [username, setUserName] = useState('');
+    const [password, setPassword] = useState('');
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [email, setEmail] = useState('');
 
-    handleChange = (e) =>{
-        this.setState({
-            [e.target.name]:e.target.value,
-        });
-    }
-
-    handleSubmit = (e) =>{
+    const handleSubmit = (e) =>{
         e.preventDefault();
-        console.log(this.state);
         axios.post('http://localhost:3001/api/insert',{
-            username: this.state.username,
-            password: this.state.password,
-            firstName: this.state.firstName,
-            lastName: this.state.lastName,
-            email: this.state.email
+            username: username,
+            password: password,
+            firstName: firstName,
+            lastName: lastName,
+            email: email
         }).then(()=>{
-            console.log('successful insert!')
+            alert('Registered!');
         })
     }
 
-    render() {
-        return (
-            <div className = "loginContainer">
-                <div className="wrapper">
-                    <h1>Register</h1>
+    return (
+        <div className = "loginContainer">
+            <div className="wrapper">
+                <h1>Register</h1>
+                <br />
+                <form>
+                    <label><b>Username</b>
+                        <input type="text"
+                            name="username"
+                            onChange={(e)=>{
+                                setUserName(e.target.value);
+                            }} 
+                            placeholder="Username..."/>
+                    </label>
                     <br />
-                    <form>
-                        <label><b>Username</b>
-                            <input type="text"
-                                name="username" 
-                                value={this.state.username} 
-                                onChange={this.handleChange} 
-                                placeholder="Username..."/>
-                        </label>
-                        <br />
-                        <label><b>Password</b>
-                            <input type="password" 
-                                name="password"
-                                value={this.state.password} 
-                                onChange={this.handleChange} 
-                                placeholder="Password..."/>
-                        </label>
-                        <br />
-                        <label><b>First Name</b>
+                    <label><b>Password</b>
+                        <input type="password" 
+                            name="password"
+                            onChange={(e)=>{
+                                setPassword(e.target.value);
+                            }} 
+                            placeholder="Password..."/>
+                    </label>
+                    <br />
+                    <label><b>First Name</b>
                             <input type="text" 
                                 name="firstName"
-                                value={this.state.firstName} 
-                                onChange={this.handleChange} 
+                                onChange={(e)=>{
+                                    setFirstName(e.target.value);
+                                }} 
                                 placeholder="First Name..."/>
                         </label>
                         <br />
                         <label><b>Last Name</b>
                             <input type="text" 
                                 name="lastName"
-                                value={this.state.lastName} 
-                                onChange={this.handleChange} 
+                                onChange={(e)=>{
+                                    setLastName(e.target.value);
+                                }} 
                                 placeholder="Last Name..."/>
                         </label>
                         <br />
                         <label><b>Email</b>
                             <input type="email" 
                                 name="email"
-                                value={this.state.email} 
-                                onChange={this.handleChange} 
+                                onChange={(e)=>{
+                                    setEmail(e.target.value);
+                                }} 
                                 placeholder="Email..."/>
                         </label>
                         <br />
                         <button type="submit" 
-                            onClick={this.handleSubmit}
-                            className="btn">Submit</button>
-                    </form>
-                </div>
+                            onClick={handleSubmit}
+                            className="btn"><Link to ='/' className="regSub">Submit</Link></button>
+                </form>
             </div>
-        )
-    }
+        </div>
+    )
 }
