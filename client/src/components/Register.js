@@ -6,6 +6,7 @@ export default function Register() {
 
     const [username, setUserName] = useState('');
     const [password, setPassword] = useState('');
+    const [passwordConfirm, setPasswordConfirm] = useState('');
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
@@ -15,6 +16,7 @@ export default function Register() {
         axios.post('http://localhost:3001/api/insert',{
             username: username,
             password: password,
+            passwordConfirm: passwordConfirm,
             firstName: firstName,
             lastName: lastName,
             email: email
@@ -43,6 +45,15 @@ export default function Register() {
                             name="password"
                             onChange={(e)=>{
                                 setPassword(e.target.value);
+                            }} 
+                            placeholder="Password..."/>
+                    </label>
+                    <br />
+                    <label><b>Confirm Password</b>
+                        <input type="password" 
+                            name="passwordConfirm"
+                            onChange={(e)=>{
+                                setPasswordConfirm(e.target.value);
                             }} 
                             placeholder="Password..."/>
                     </label>
