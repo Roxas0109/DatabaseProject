@@ -15,6 +15,8 @@ app.use(cors())
 app.use(express.json())
 app.use(bodyParser.urlencoded({extended: true}));
 
+//DUE TO PLACEHOLDERS (?) WE CAN AVOID SQL INJECTION ATTACKS
+
 app.get('/api/get', (req, res)=>{
     const sqlSelect = "SELECT * FROM user";
     db.query(sqlSelect, (err, result)=>{
@@ -32,6 +34,25 @@ app.post('/api/insert', (req, res)=>{
     const sqlInsert = "INSERT INTO user (username, password, firstName, lastName, email) VALUES (?, ?, ?, ?, ?)";
     db.query(sqlInsert, [username, password, firstName, lastName, email], (err, result)=>{
         res.send(result)
+    })
+});
+
+app.post('/api/login', (req, res)=>{
+    const username = req.body.username
+    const password = req.body.password
+
+    const sqlLogin = "SELECT * FROM user WHERE username=? AND password=?";
+    db.query(sqlLogin,[username, password], (err, result)=>{
+        if(err){
+            res.send({err: err})
+        }
+
+        if(result.length > 0){
+            res.send(result);
+        }
+        else{
+            res.send({message:"Wrong username/password combination!"});
+        }
     })
 });
 
