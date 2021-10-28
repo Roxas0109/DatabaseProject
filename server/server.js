@@ -40,7 +40,6 @@ app.post('/api/insert', (req, res) => {
         else {
             const sqlInsert = "INSERT INTO user (username, password, firstName, lastName, email) VALUES (?, ?, ?, ?, ?)";
             db.query(sqlInsert, [username, password, firstName, lastName, email], (err, result)=>{
-            res.send(result)
                 
             if (err.sqlMessage.includes(dupUserErr)) {
                 console.log("Username already in use.")
