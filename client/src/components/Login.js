@@ -19,7 +19,6 @@ export default function Login() {
             }
             else{
                 console.log(response.data)
-                return <Link to="/initialize"></Link>
             }
         })
     }
