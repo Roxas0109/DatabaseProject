@@ -1,16 +1,30 @@
 import React from 'react'
 import { useRouteMatch } from 'react-router'
 import {
-    BrowserRouter as Router,
     Switch,
     Route,
-    Link,
+    useHistory,
   } from 'react-router-dom'
 import ShowData from './ShowData';
+import axios from 'axios';
 
 export default function Initialize() {
     let match=useRouteMatch();
+    const history = useHistory()
+    const handleSubmit = (e) =>{
+        e.preventDefault();
+        axios.get('http://localhost:3001/api/sqlIns',{
 
+        }).then((response)=>{
+            if(response.data.err){
+                console.log(response.data.err)
+            }
+            else{  
+                console.log(response.data);
+                history.push(`${match.path}/showdata`)
+            }
+        })
+    }
     return (
         <div className="loginContainer">
             <div className="wrapper">
@@ -20,11 +34,8 @@ export default function Initialize() {
                 <br/>
                 <h2>Press Initialize to show database.</h2>
                 <br/>
-                <Link to={`${match.url}/showdata`}>
-                    <button className="btn">Initialize</button>
-                </Link>
+                <button className="btn" onClick={handleSubmit}>Initialize</button>
                 </Route>
-
                 <Route path={`${match.path}/showdata`}>
                     <ShowData/>
                 </Route>
