@@ -22,18 +22,44 @@ app.get('/api/get', (req, res)=>{
     })
 });
 
-app.post('/api/insert', (req, res)=>{
+app.post('/api/insert', (req, res) => {
     const username = req.body.username
     const password = req.body.password
+    const passwordConfirm = req.body.passwordConfirm
     const firstName = req.body.firstName
     const lastName = req.body.lastName
     const email = req.body.email
 
-    const sqlInsert = "INSERT INTO user (username, password, firstName, lastName, email) VALUES (?, ?, ?, ?, ?)";
-    db.query(sqlInsert, [username, password, firstName, lastName, email], (err, result)=>{
-        res.send(result)
+    const dupEmailErr = "for key 'email_UNIQUE'"
+    const dupUserErr = "for key 'PRIMARY'"
+
+        if (password != passwordConfirm) {
+            res.send({fail:{passFail:"Passwords do not match"}})
+        }
+  
+        else {
+            const sqlInsert = "INSERT INTO user (username, password, firstName, lastName, email) VALUES (?, ?, ?, ?, ?)";
+            db.query(sqlInsert, [username, password, firstName, lastName, email], (err, result)=>{
+            
+            if(err){
+                if (err.sqlMessage.includes(dupUserErr)) {
+                    res.send({fail:{userFail:"Username already in use."}})
+                }
+    
+                else if(err.sqlMessage.includes(dupEmailErr)) {
+                    res.send({fail:{emailFail:"E-mail already in use."}})
+                }
+            }
+
+            else {
+                res.send({pass:"Registered!"})
+            }
+
+        })
+        }
+            
     })
-});
+
 
 app.listen(3001, ()=>{
     console.log('running on port 3001')
