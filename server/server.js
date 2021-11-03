@@ -3,12 +3,14 @@ const bodyParser = require('body-parser')
 const cors = require('cors')
 const app = express();
 const mysql = (require('mysql'));
+const fs = require('fs');
 
 const db = mysql.createPool({
     host: 'comp440dbserver.mysql.database.azure.com',
     user: 'comp440@comp440dbserver',
     password: 'pass1234',
-    database: 'dbproject'
+    database: 'dbproject',
+    multipleStatements : true
 });
 
 app.use(cors())
@@ -81,6 +83,29 @@ app.post('/api/login', (req, res)=>{
         }
     })
 });
+
+app.get('/api/sqlIns', (req, res)=>{
+    let sqlQueries = "";   
+    fs.readFile('sqlTest.sql', 'utf8' , (err, data) => {
+        if (err) {
+          console.error(err)
+          return
+        } 
+        sqlQueries = data;
+    })
+
+    setTimeout(() => {
+        db.query(sqlQueries,(err,result)=>{
+        if(err){
+            res.send({err: err})
+        }
+        else{
+            res.send(result);
+        }
+            })
+    }, 1000);
+
+})
 
 app.listen(3001, ()=>{
     console.log('running on port 3001')
