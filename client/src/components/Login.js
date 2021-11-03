@@ -1,11 +1,30 @@
 import './Login.css';
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import axios from 'axios';
+import { Link, useHistory } from 'react-router-dom';
 
 export default function Login() {
 
     const [username, setUserName] = useState('');
     const [password, setPassword] = useState('');
+
+    const history = useHistory()
+
+    const handleSubmit = (e) =>{
+        e.preventDefault();
+        axios.post('http://localhost:3001/api/login',{
+            username: username,
+            password: password,
+        }).then((response)=>{
+            if(response.data.fail){
+                alert(response.data.fail)
+            }
+            else{
+                console.log(response.data.pass)
+                history.push('/initialize')
+            }
+        })
+    }
 
     return (
         <div className = "loginContainer">
@@ -31,10 +50,8 @@ export default function Login() {
                             placeholder="Password..."/>
                     </label>
                     <br />
-                    <Link to="/initialize">
-                    <button type="submit" 
+                    <button type="submit" onClick={handleSubmit}
                         className="btn">Submit</button>
-                    </Link>
                     <Link to="/register">
                     <button type="submit" 
                         className="btn">Register</button>
