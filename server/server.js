@@ -18,7 +18,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 //DUE TO PLACEHOLDERS (?) WE CAN AVOID SQL INJECTION ATTACKS
 
 app.get('/api/get', (req, res)=>{
-    const sqlSelect = "SELECT * FROM user";
+    const sqlSelect = "SELECT * FROM student";
     db.query(sqlSelect, (err, result)=>{
         res.send(result)
     })

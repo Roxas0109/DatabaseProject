@@ -1,3 +1,4 @@
+import './ShowData.css'
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
@@ -13,10 +14,23 @@ export default function ShowData() {
 
     return (
         <div>
-            <h3>Current Users</h3>
-            {userList.map((val)=>{
-                return <h4>{val.username}, {val.password}, {val.firstName}, {val.lastName}, {val.email}</h4>
-            })}
+            <h3>Student Table</h3>
+            <table className='stTable'>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Dept. Name</th>
+                    <th>Total Credits</th>
+                </tr>
+                {userList.map((val)=>{
+                    return <tr>
+                        <td>{val.ID}</td>
+                        <td>{val.name}</td>
+                        <td>{val.dept_name}</td> 
+                        <td>{val.tot_cred}</td>
+                    </tr>
+                })}
+            </table>
         </div>
     )
 }
