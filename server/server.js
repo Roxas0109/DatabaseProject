@@ -48,10 +48,10 @@ app.post('/api/login', (req, res)=>{
         }
 
         if(result.length > 0){
-            res.send(result);
+            res.send({pass:"Success!"});
         }
         else{
-            res.send({message:"Wrong username/password combination!"});
+            res.send({fail:"Wrong username/password combination!"});
         }
     })
 });

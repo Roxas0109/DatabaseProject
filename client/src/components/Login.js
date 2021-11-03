@@ -1,12 +1,14 @@
 import './Login.css';
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 export default function Login() {
 
     const [username, setUserName] = useState('');
     const [password, setPassword] = useState('');
+
+    const history = useHistory()
 
     const handleSubmit = (e) =>{
         e.preventDefault();
@@ -14,11 +16,12 @@ export default function Login() {
             username: username,
             password: password,
         }).then((response)=>{
-            if(response.data.message){
-                alert(response.data.message)
+            if(response.data.fail){
+                alert(response.data.fail)
             }
             else{
-                console.log(response.data)
+                console.log(response.data.pass)
+                history.push('/initialize')
             }
         })
     }
@@ -47,10 +50,8 @@ export default function Login() {
                             placeholder="Password..."/>
                     </label>
                     <br />
-                    <Link to="/initialize">
                     <button type="submit" onClick={handleSubmit}
                         className="btn">Submit</button>
-                    </Link>
                     <Link to="/register">
                     <button type="submit" 
                         className="btn">Register</button>
