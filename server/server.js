@@ -30,28 +30,29 @@ app.post('/api/insert', (req, res) => {
     const lastName = req.body.lastName
     const email = req.body.email
 
-    const dupUserErr = "for key 'email_UNIQUE'"
-    const dupEmailErr = "for key 'PRIMARY'"
+    const dupEmailErr = "for key 'email_UNIQUE'"
+    const dupUserErr = "for key 'PRIMARY'"
 
         if (password != passwordConfirm) {
-            console.log("Passwords do not match")
+            res.send({fail:{passFail:"Passwords do not match"}})
         }
   
         else {
             const sqlInsert = "INSERT INTO user (username, password, firstName, lastName, email) VALUES (?, ?, ?, ?, ?)";
             db.query(sqlInsert, [username, password, firstName, lastName, email], (err, result)=>{
-                
-            if (err.sqlMessage.includes(dupUserErr)) {
-                console.log("Username already in use.")
+            
+            if(err){
+                if (err.sqlMessage.includes(dupUserErr)) {
+                    res.send({fail:{userFail:"Username already in use."}})
+                }
+    
+                else if(err.sqlMessage.includes(dupEmailErr)) {
+                    res.send({fail:{emailFail:"E-mail already in use."}})
+                }
             }
 
-            else if (err.sqlMessage.includes(dupEmailErr)) {
-                console.log("E-mail already in use.")
-             }
-
             else {
-                res.send(result)
-                console.log("Registered!")
+                res.send({pass:"Registered!"})
             }
 
         })

@@ -20,8 +20,23 @@ export default function Register() {
             firstName: firstName,
             lastName: lastName,
             email: email
-        }).then(()=>{
-            alert('Registered!');
+        }).then((response)=>{
+            if(response.data.fail){
+                if(response.data.fail.passFail){
+                    alert(response.data.fail.passFail)
+                }
+                if(response.data.fail.userFail){
+                    alert(response.data.fail.userFail)
+                    console.log("user fail")
+                }
+                if(response.data.fail.emailFail){
+                    alert(response.data.fail.emailFail)
+                    console.log("email fail")
+                }
+            }
+            else{
+                alert(response.data.pass)
+            }
         })
     }
 
@@ -87,7 +102,8 @@ export default function Register() {
                         <br />
                         <button type="submit" 
                             onClick={handleSubmit}
-                            className="btn"><Link to ='/' className="regSub">Submit</Link></button>
+                            className="btn">Submit</button>
+                            {/* className="btn"><Link to ='/' className="regSub">Submit</Link></button> */}
                 </form>
             </div>
         </div>
