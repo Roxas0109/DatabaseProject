@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 export default function Register() {
 
@@ -10,6 +10,8 @@ export default function Register() {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
+
+    const history = useHistory()
 
     const handleSubmit = (e) =>{
         e.preventDefault();
@@ -36,6 +38,7 @@ export default function Register() {
             }
             else{
                 alert(response.data.pass)
+                history.push('/')
             }
         })
     }
@@ -103,7 +106,6 @@ export default function Register() {
                         <button type="submit" 
                             onClick={handleSubmit}
                             className="btn">Submit</button>
-                            {/* className="btn"><Link to ='/' className="regSub">Submit</Link></button> */}
                 </form>
             </div>
         </div>
