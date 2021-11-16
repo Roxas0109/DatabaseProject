@@ -1,32 +1,33 @@
 import React from 'react';
 import './App.css';
 import Login from './components/Login';
-import logo  from './ECSlogo.jpg';
+import logo from './ECSlogo.jpg';
 import {
   BrowserRouter as Router,
-  Switch,
+  Routes,
   Route,
 } from 'react-router-dom'
 import Register from './components/Register';
 import Initialize from './components/Initialize';
+import ShowData from './components/ShowData';
+import Content from './components/Content';
 
 function App() {
   return (
     <Router>
       <div className="App">
-        <img alt="ECS logo" src={logo} className="ECSlogo"/>
+        <img alt="ECS logo" src={logo} className="ECSlogo" />
 
-        <Switch>
-          <Route exact path='/'>
-            <Login/>
+        <Routes>
+          <Route path='/' element={<Login />} />
+
+          <Route path='register' element={<Register />} />
+
+          <Route path='initialize' element={<Content />}>
+            <Route index element={<Initialize />} />
+            <Route path='showdata' element={<ShowData />} />
           </Route>
-          <Route path='/register'>
-            <Register/>
-          </Route>
-          <Route path='/initialize'>
-            <Initialize/>
-          </Route>
-        </Switch>
+        </Routes>
       </div>
     </Router>
   );
