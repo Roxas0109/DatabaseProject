@@ -11,6 +11,7 @@ import Register from './components/Register';
 import Initialize from './components/Initialize';
 import ShowData from './components/ShowData';
 import Content from './components/Content';
+import Home from './components/Home';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
 
           <Route path='initialize' element={<Content />}>
             <Route index element={<Initialize />} />
+            <Route path='home' element={<Home />} />
             <Route path='showdata' element={<ShowData />} />
           </Route>
         </Routes>

@@ -2,3 +2,10 @@
     border:1px solid black;
     width: 100%;
 }
+
+.tableCont{
+    overflow-y: scroll;
+    height: 700px;
+    /* position: relative;
+    top: 70%; */
+}

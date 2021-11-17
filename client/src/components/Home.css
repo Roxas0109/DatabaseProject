@@ -1,0 +1,9 @@
+.home{
+    top: 100px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height:  300px;
+    flex-direction: column;
+}

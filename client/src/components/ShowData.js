@@ -13,25 +13,27 @@ export default function ShowData() {
     }, [])
 
     return (
-        <>
+        <div>
             <h3>Student Table</h3>
-            <table className='stTable'>
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Dept. Name</th>
-                    <th>Total Credits</th>
-                </tr>
-                {userList.map((val) => {
-                    return <tr>
-                        <td>{val.ID}</td>
-                        <td>{val.name}</td>
-                        <td>{val.dept_name}</td>
-                        <td>{val.tot_cred}</td>
+            <div className="tableCont">
+                <table className='stTable'>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Dept. Name</th>
+                        <th>Total Credits</th>
                     </tr>
-                })}
-            </table>
-        </>
+                    {userList.map((val) => {
+                        return <tr>
+                            <td>{val.ID}</td>
+                            <td>{val.name}</td>
+                            <td>{val.dept_name}</td>
+                            <td>{val.tot_cred}</td>
+                        </tr>
+                    })}
+                </table>
+            </div>
+        </div>
     )
 }
 

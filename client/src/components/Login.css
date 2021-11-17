@@ -22,16 +22,20 @@ label, input , button{
 }
 
 .btn {
-    background-color: #D22030;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
     font-size: large;
     color: white;
-    padding: 2%;
+    box-shadow: none;
+    border: none;
+    padding: 5px 20px 5px 20px;
+    border-radius: 500px;
+    background-color: #D22030;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    transition: background-color 0.27s;
+    margin: 8px 0;
+    user-select: none;
   }
 
 .btn:hover {
-background-color: #555;
-color: white;
+    background-color: #911620;
 }
