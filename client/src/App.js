@@ -25,10 +25,14 @@ function App() {
 
           <Route path='register' element={<Register />} />
 
-          <Route path='initialize' element={<Content />}>
-            <Route index element={<Initialize />} />
-            <Route path='home' element={<Home />} />
-            <Route path='showdata' element={<ShowData />} />
+          <Route path='home' element={<Content />}>
+            <Route index element={<Home />} />
+
+            <Route path='initialize' element={<Content />}>
+              <Route index element={<Initialize />} />
+              <Route path='showdata' element={<ShowData />} />
+            </Route>
+
             <Route path='createblog' element={<CreateBlog />} />
           </Route>
         </Routes>

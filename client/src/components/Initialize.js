@@ -15,15 +15,13 @@ export default function Initialize() {
             }
             else {
                 console.log(response.data);
-                navigate(`home`)
+                navigate(`showdata`)
             }
         })
     }
     return (
         <div className="loginContainer">
-            <h1>You're Logged in!</h1>
-            <br />
-            <h2>Press Initialize to run database.</h2>
+            <h1>Press Initialize to run database script.</h1>
             <br />
             <button className="btn" onClick={handleSubmit}>Initialize</button>
         </div>

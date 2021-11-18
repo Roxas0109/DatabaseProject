@@ -21,7 +21,7 @@ export default function Login() {
             }
             else {
                 console.log(response.data.pass)
-                navigate('initialize')
+                navigate('home')
             }
         })
     }
