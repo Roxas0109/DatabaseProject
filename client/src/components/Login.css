@@ -32,7 +32,7 @@ label, input , button{
     background-repeat: no-repeat;
     cursor: pointer;
     transition: background-color 0.27s;
-    margin: 8px 0;
+    margin: 8px;
     user-select: none;
   }
 

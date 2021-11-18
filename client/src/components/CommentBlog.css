@@ -1,0 +1,18 @@
+.blogs{
+    border-color: #D22030;
+    border-style: solid;
+    box-shadow: 0 8px 12px 0 rgba(0, 0, 0, 0.4);
+    border-radius: 25px;
+    width: 900px;
+    margin: 30px;
+    background: whitesmoke;
+}
+
+.commentCont{
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    align-items: center;
+    justify-content:space-around;
+    top: 50px;
+}
