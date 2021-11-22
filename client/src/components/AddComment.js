@@ -1,11 +1,27 @@
 import React, { useState } from 'react'
 import './AddComment.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { useSelector } from 'react-redux';
+import { userSelector } from '../features/user/userSlice';
+
 
 
 export default function AddComment() {
 
     const [show, setShow] = useState(false);
+    const [like, setLike] = useState(true);
+    const [comment, setComment] = useState('');
+
+    const username = useSelector(userSelector);
+
+    const handleLike = () => {
+        setLike(!like);
+    }
+
+    const handlePost = () => {
+        console.log(like)
+        console.log(comment)
+    }
 
     return (
         <>
@@ -15,19 +31,22 @@ export default function AddComment() {
 
             <div className={show ? "comment" : "noShow"}>
                 <div className="commentWrapper">
-                    <h3>User: ...</h3>
-                    <button className="btn">
+                    <h3>User: {username}</h3>
+                    <button className={like ? "btn active" : "btn not-active"} onClick={handleLike}>
                         <FontAwesomeIcon icon="thumbs-up" />
                     </button>
-                    <button className="btn">
+                    <button className={like ? "btn not-active" : "btn active"} onClick={handleLike}>
                         <FontAwesomeIcon icon="thumbs-down" />
                     </button>
-                    <label><h3>Comment: </h3><textarea className="desc" /></label>
+                    <label>
+                        <h3>Comment: </h3>
+                        <textarea className="desc" onChange={(e) => setComment(e.target.value)} />
+                    </label>
                     <br />
                     <button className={show ? "btn" : "noShow"} onClick={() => {
                         setShow(!show)
                     }}>Cancel</button>
-                    <button className="btn">Post</button>
+                    <button className="btn" onClick={handlePost}>Post</button>
                 </div>
             </div>
         </>

@@ -17,8 +17,11 @@
     text-align: center;
 }
 
-label, input , button{
+.wrapper>form>label>input{
+    margin: 100px;
     margin: 2%;
+    border-radius: 5px;
+    border: 2px solid #ccc;
 }
 
 .btn {
