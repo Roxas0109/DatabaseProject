@@ -33,10 +33,10 @@
     text-align: left;
 }
 
-.like{
+.not-active{
     background-color: #55565a;
 }
 
-.like:active{
+.active{
     background-color: #D22030;
 }
