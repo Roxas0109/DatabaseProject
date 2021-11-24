@@ -7,13 +7,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 export default function CommentBlog() {
 
     const [blogList, setBlogList] = useState([])
-    // const [commentList, setCommentList] = useState([])
-    const [blogid, setBlogId] = useState(0)
 
     useEffect(() => {
         axios.get('http://localhost:3001/api/getblogs').then((response) => {
             setBlogList(response.data)
-            getComments()
         });
 
     }, [])
@@ -27,50 +24,45 @@ export default function CommentBlog() {
         }
     }
 
-    // const displayComments = commentList.map((item) => {
-    //     return (
-    //         <div className="comments">
-    //             <h4>Posted by: {item.posted_by}</h4>
-    //             {likeIcon(item.sentiment)}
-    //             <p>{item.description}</p>
-    //         </div>
-    //     )
-    // })
+    const displayComments = (blog) => {
+        var commentList = [{ posted_by: "test", sentiment: "true", description: "sample desc" }]
+        axios.post('http://localhost:3001/api/getcomments', {
+            blogid: blog.blogid
+        }).then((response) => {
+            commentList = response.data
+        });
 
-    const getComments = () => {
-        // setTimeout(() => {
-        //     axios.post('http://localhost:3001/api/getcomments', {
-        //         blogid: blogid
-        //     }).then((response) => {
-        //         setCommentList(response.data)
-        //         // displayComments()
-        //     });
-        // }, 1000)
-        blogList.map(item => {
-            console.log(item)
-            setBlogId(item.blogid)
-            axios.post('http://localhost:3001/api/getcomments', {
-                blogid: item.blogid
-            }).then((response) => {
-                
-            });
-        })
-        // axios.post('http://localhost:3001/api/getcomments', {
-        //     blogid: blogid
-        // }).then((response) => {
-        //     // setCommentList(response.data)
-        //     console.log(response)
-        // });
+        console.log("test", commentList)
+        return (
+            <>
+                {
+                    commentList.map((item) => {
+                        // console.log("item", item)
+                        return (
+                            <div className="comments">
+                                <div className="commentsWrapper">
+                                    <h4>Posted by: {item.posted_by}</h4>
+                                    {likeIcon(item.sentiment)}
+                                    <p>{item.description}</p>
+                                </div>
+                            </div>
+                        )
+                    })
+                }
+            </>
+        )
     }
 
     const displayBlogs = blogList.map((item) => {
         return (
             <div className="blogs">
                 <h3>{item.subject}</h3>
-                <h4>Posted by: {item.created_by}</h4>
+                <h4>Created by: {item.created_by}</h4>
                 <p>{item.description}</p>
                 <p>Tags: {item.tags}</p>
-                {/* {displayComments} */}
+                {/* {getComments(item)} */}
+                {/* {displayComments(getComments(item))} */}
+                {displayComments(item)}
                 <AddComment />
             </div>
         )
