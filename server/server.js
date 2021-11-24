@@ -122,7 +122,7 @@ app.post('/api/addcomment', (req, res) => {
 
 //RETRIEVE BLOGS WITH TAGS
 app.get('/api/getblogs', (req, res) => {
-    const query = "SELECT b.*, GROUP_CONCAT(DISTINCT tag SEPARATOR ', ') AS tags FROM blogs AS b, blogstags AS t WHERE b.blogid = t.blogid GROUP BY t.blogid"
+    const query = "SELECT b.*, GROUP_CONCAT(DISTINCT tag SEPARATOR ', ') AS tags FROM blogs AS b, blogstags AS t WHERE b.blogid = t.blogid GROUP BY t.blogid LIMIT 2"
     db.query(query, (err, result) => {
         res.send(result)
     })
@@ -132,7 +132,7 @@ app.get('/api/getblogs', (req, res) => {
 app.post('/api/getcomments', (req, res) => {
     const blogid = req.body.blogid
 
-    const query = "SELECT c.* FROM comments AS c, blogs AS b WHERE c.blogid = b.blogid AND c.blogid = ?";
+    const query = "SELECT * FROM comments WHERE blogid = ?";
     db.query(query, [blogid], (err, result) => {
         if (err) {
             res.send(err)
