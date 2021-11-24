@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import './AddComment.css'
+import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useSelector } from 'react-redux';
 import { userSelector } from '../features/user/userSlice';
@@ -18,9 +19,22 @@ export default function AddComment() {
         setLike(!like);
     }
 
-    const handlePost = () => {
-        console.log(like)
-        console.log(comment)
+    const handlePost = (e) => {
+        e.preventDefault();
+        console.log(username)
+        axios.post('http://localhost:3001/api/addcomment', {
+            username: username,
+            like: like,
+            comment:comment,
+        }).then((response) => {  
+            console.log(response)                  
+            if (response.data.fail) {
+                alert(response.data.fail.countFail)
+            }
+            else {
+                alert(response.data.pass)
+            }
+        })
     }
 
     return (
@@ -46,7 +60,7 @@ export default function AddComment() {
                     <button className={show ? "btn" : "noShow"} onClick={() => {
                         setShow(!show)
                     }}>Cancel</button>
-                    <button className="btn" onClick={handlePost}>Post</button>
+                    <button type = "submit" className="btn" onClick={handlePost}>Post</button>
                 </div>
             </div>
         </>
