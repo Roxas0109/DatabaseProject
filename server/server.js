@@ -20,6 +20,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 //DUE TO PLACEHOLDERS (?) WE CAN AVOID SQL INJECTION ATTACKS
 
+//RETRIEVE DATA FROM STUDENT TABLE
 app.get('/api/get', (req, res) => {
     const sqlSelect = "SELECT * FROM student";
     db.query(sqlSelect, (err, result) => {
@@ -27,6 +28,7 @@ app.get('/api/get', (req, res) => {
     })
 });
 
+//INSERT DATA FOR REGISTER
 app.post('/api/insert', (req, res) => {
     const username = req.body.username
     const password = req.body.password
@@ -43,7 +45,7 @@ app.post('/api/insert', (req, res) => {
     }
 
     else {
-        const sqlInsert = "INSERT INTO user (username, password, firstName, lastName, email) VALUES (?, ?, ?, ?, ?)";
+        const sqlInsert = "INSERT INTO users (username, password, firstName, lastName, email) VALUES (?, ?, ?, ?, ?)";
         db.query(sqlInsert, [username, password, firstName, lastName, email], (err, result) => {
 
             if (err) {
@@ -65,12 +67,12 @@ app.post('/api/insert', (req, res) => {
 
 })
 
-
+//CHECK IF USER EXISTS FOR LOGIN
 app.post('/api/login', (req, res) => {
     const username = req.body.username
     const password = req.body.password
 
-    const sqlLogin = "SELECT * FROM user WHERE username=? AND password=?";
+    const sqlLogin = "SELECT * FROM users WHERE username=? AND password=?";
     db.query(sqlLogin, [username, password], (err, result) => {
         if (err) {
             res.send({ err: err })
@@ -85,13 +87,14 @@ app.post('/api/login', (req, res) => {
     })
 });
 
+//ADDING COMMENTS
 app.post('/api/addcomment', (req, res) => {
-    const username = req.body.username
-    const like = req.body.like
-    const comment = req.body.comment
+    const posted_by = req.body.posted_by
+    const sentiment = req.body.sentiment
+    const description = req.body.description
     var count;
-    const checkCount = "SELECT COUNT(*) AS count FROM comments WHERE username = ?"
-    db.query(checkCount, [username], (err, result) => {
+    const checkCount = "SELECT COUNT(*) AS count FROM comments WHERE posted_by = ?"
+    db.query(checkCount, [posted_by], (err, result) => {
         if (err) {
             res.send(err)
         } else {
@@ -100,8 +103,8 @@ app.post('/api/addcomment', (req, res) => {
     })
     setTimeout(() => {
         if (count < 3) {
-            const sqlInsertC = "INSERT INTO comments (username,likes,comments) VALUES (?, ?, ?)";
-            db.query(sqlInsertC, [username, like, comment], (err, result) => {
+            const sqlInsertC = "INSERT INTO comments (sentiment,description,posted_by,cdate,blogid) VALUES (?, ?, ?, DATE(NOW()), ?)";
+            db.query(sqlInsertC, [sentiment.toString(), description, posted_by, 2], (err, result) => {
 
                 if (err) {
                     res.send(err)
@@ -117,7 +120,30 @@ app.post('/api/addcomment', (req, res) => {
     }, 500);
 })
 
+//RETRIEVE BLOGS WITH TAGS
+app.get('/api/getblogs', (req, res) => {
+    const query = "SELECT b.*, GROUP_CONCAT(DISTINCT tag SEPARATOR ', ') AS tags FROM blogs AS b, blogstags AS t WHERE b.blogid = t.blogid GROUP BY t.blogid"
+    db.query(query, (err, result) => {
+        res.send(result)
+    })
+})
 
+//RETRIEVE COMMENTS FOR SPECIFIC BLOG
+app.post('/api/getcomments', (req, res) => {
+    const blogid = req.body.blogid
+
+    const query = "SELECT c.* FROM comments AS c, blogs AS b WHERE c.blogid = b.blogid AND c.blogid = ?";
+    db.query(query, [blogid], (err, result) => {
+        if (err) {
+            res.send(err)
+        }
+        else {
+            res.send(result)
+        }
+    })
+});
+
+//RUNNING SCRIPT
 app.get('/api/sqlIns', (req, res) => {
     let sqlQueries = "";
     fs.readFile('sqlTest.sql', 'utf8', (err, data) => {

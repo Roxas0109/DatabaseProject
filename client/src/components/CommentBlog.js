@@ -1,29 +1,68 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import axios from 'axios';
 import AddComment from './AddComment'
 import './CommentBlog.css'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export default function CommentBlog() {
 
-    const data = [
-        {
-            "Subject": "Lorem Ipsum",
-            "Description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Tellus cras adipiscing enim eu. Amet purus gravida quis blandit turpis cursus in. Nisl pretium fusce id velit ut tortor. Dolor magna eget est lorem ipsum. Turpis tincidunt id aliquet risus feugiat in ante metus dictum. Varius quam quisque id diam vel quam elementum pulvinar etiam. Mauris augue neque gravida in. Viverra orci sagittis eu volutpat odio facilisis mauris. Imperdiet massa tincidunt nunc pulvinar sapien et ligula ullamcorper. Rutrum tellus pellentesque eu tincidunt tortor aliquam nulla. Etiam dignissim diam quis enim lobortis scelerisque. Nec nam aliquam sem et tortor. Dui ut ornare lectus sit amet. Facilisis sed odio morbi quis commodo odio aenean sed.",
-            "Tags": "#Lorem #Ipsum #LoremIpsum"
-        },
-        {
-            "Subject": "Lorem Ipsum",
-            "Description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Tellus cras adipiscing enim eu. Amet purus gravida quis blandit turpis cursus in. Nisl pretium fusce id velit ut tortor. Dolor magna eget est lorem ipsum. Turpis tincidunt id aliquet risus feugiat in ante metus dictum. Varius quam quisque id diam vel quam elementum pulvinar etiam. Mauris augue neque gravida in. Viverra orci sagittis eu volutpat odio facilisis mauris. Imperdiet massa tincidunt nunc pulvinar sapien et ligula ullamcorper. Rutrum tellus pellentesque eu tincidunt tortor aliquam nulla. Etiam dignissim diam quis enim lobortis scelerisque. Nec nam aliquam sem et tortor. Dui ut ornare lectus sit amet. Facilisis sed odio morbi quis commodo odio aenean sed.",
-            "Tags": "#Lorem #Ipsum #LoremIpsum"
-        }
-    ]
+    const [blogList, setBlogList] = useState([])
+    const [commentList, setCommentList] = useState([])
 
-    const displayBlogs = data.map((item)=>{
+    useEffect(() => {
+        axios.get('http://localhost:3001/api/getblogs').then((response) => {
+            setBlogList(response.data)
+        });
+
+    }, [])
+
+    const getComments = (blogid) => {
+        // setTimeout(() => {
+        //     axios.post('http://localhost:3001/api/getcomments', {
+        //         blogid: blogid
+        //     }).then((response) => {
+        //         setCommentList(response.data)
+        //         // displayComments()
+        //     });
+        // }, 1000)
+        axios.post('http://localhost:3001/api/getcomments', {
+            blogid: blogid
+        }).then((response) => {
+            setCommentList(response.data)
+            console.log(commentList)
+            displayComments()
+        });
+    }
+
+    const displayBlogs = blogList.map((item) => {
+        console.log(getComments(item.blogid))
         return (
             <div className="blogs">
-                <h3>{item.Subject}</h3>
-                <p>{item.Description}</p>
-                <p>{item.Tags}</p>
-                <AddComment/>
+                <h3>{item.subject}</h3>
+                <h4>Posted by: {item.created_by}</h4>
+                <p>{item.description}</p>
+                <p>Tags: {item.tags}</p>
+                {/* {getComments(item.blogid)} */}
+                <AddComment />
+            </div>
+        )
+    })
+
+    const likeIcon = (sentiment) => {
+        if (sentiment === 'positive' || sentiment === 'true') {
+            return (<FontAwesomeIcon icon="thumbs-up" />)
+        }
+        else {
+            return (<FontAwesomeIcon icon="thumbs-down" />)
+        }
+    }
+
+    const displayComments = commentList.map((item) => {
+        return (
+            <div className="comments">
+                <h4>Posted by: {item.posted_by}</h4>
+                {likeIcon(item.sentiment)}
+                <p>{item.description}</p>
             </div>
         )
     })
