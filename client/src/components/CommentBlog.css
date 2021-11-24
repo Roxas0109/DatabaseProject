@@ -34,3 +34,7 @@
     align-items: center;
     flex-direction: column;
 }
+
+.commentsWrapper>h4, p{
+    margin: 3px;
+}

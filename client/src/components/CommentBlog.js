@@ -32,18 +32,16 @@ export default function CommentBlog() {
             commentList = response.data
         });
 
-        console.log("test", commentList)
         return (
             <>
                 {
                     commentList.map((item) => {
-                        // console.log("item", item)
+                        console.log("item", item)
                         return (
                             <div className="comments">
                                 <div className="commentsWrapper">
                                     <h4>Posted by: {item.posted_by}</h4>
-                                    {likeIcon(item.sentiment)}
-                                    <p>{item.description}</p>
+                                    <p>{likeIcon(item.sentiment)} {item.description}</p>
                                 </div>
                             </div>
                         )
@@ -60,8 +58,6 @@ export default function CommentBlog() {
                 <h4>Created by: {item.created_by}</h4>
                 <p>{item.description}</p>
                 <p>Tags: {item.tags}</p>
-                {/* {getComments(item)} */}
-                {/* {displayComments(getComments(item))} */}
                 {displayComments(item)}
                 <AddComment />
             </div>
