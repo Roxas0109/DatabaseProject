@@ -104,7 +104,7 @@ app.post('/api/addcomment', (req, res) => {
     setTimeout(() => {
         if (count < 3) {
             const sqlInsertC = "INSERT INTO comments (sentiment,description,posted_by,cdate,blogid) VALUES (?, ?, ?, DATE(NOW()), ?)";
-            db.query(sqlInsertC, [sentiment.toString(), description, posted_by, 2], (err, result) => {
+            db.query(sqlInsertC, [sentiment.toString(), description, posted_by, 1], (err, result) => {
 
                 if (err) {
                     res.send(err)
@@ -122,26 +122,32 @@ app.post('/api/addcomment', (req, res) => {
 
 //RETRIEVE BLOGS WITH TAGS
 app.get('/api/getblogs', (req, res) => {
-    const query = "SELECT b.*, GROUP_CONCAT(DISTINCT tag SEPARATOR ', ') AS tags FROM blogs AS b, blogstags AS t WHERE b.blogid = t.blogid GROUP BY t.blogid LIMIT 2"
+    const query = "SELECT b.*, GROUP_CONCAT(DISTINCT tag SEPARATOR ', ') AS tags FROM blogs AS b, blogstags AS t WHERE b.blogid = t.blogid GROUP BY t.blogid"
     db.query(query, (err, result) => {
         res.send(result)
     })
 })
 
 //RETRIEVE COMMENTS FOR SPECIFIC BLOG
-app.post('/api/getcomments', (req, res) => {
-    const blogid = req.body.blogid
+// app.post('/api/getcomments', (req, res) => {
+//     const blogid = req.body.blogid
 
-    const query = "SELECT * FROM comments WHERE blogid = ?";
-    db.query(query, [blogid], (err, result) => {
-        if (err) {
-            res.send(err)
-        }
-        else {
-            res.send(result)
-        }
+//     const query = "SELECT * FROM comments WHERE blogid = ?";
+//     db.query(query, [blogid], (err, result) => {
+//         if (err) {
+//             res.send(err)
+//         }
+//         else {
+//             res.send(result)
+//         }
+//     })
+// });
+app.get('/api/getcomments', (req, res) => {
+    const query = "SELECT * FROM comments";
+    db.query(query, (err, result) => {
+        res.send(result)
     })
-});
+})
 
 //RUNNING SCRIPT
 app.get('/api/sqlIns', (req, res) => {

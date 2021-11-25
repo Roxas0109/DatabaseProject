@@ -25,13 +25,14 @@
     width: fit-content;
     margin: 30px;
     background: whitesmoke;
+    margin-left: auto;
+    margin-right: auto;
 
 }
 
 .commentsWrapper{
     display: flex;
     padding: 3px;
-    align-items: center;
     flex-direction: column;
 }
 
