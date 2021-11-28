@@ -1,19 +1,16 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import './CreateBlog.css';
-import { useSelector } from 'react-redux';
-import { userSelector } from '../features/user/userSlice';
 import { useNavigate } from 'react-router-dom';
 
 export default function CreateBlog() {
-
     const navigate = useNavigate()
 
     const [subject, setSubject] = useState('');
     const [description, setDescription] = useState('');
     const [tags, setTags] = useState('');
 
-    const username = useSelector(userSelector);
+    const username = window.localStorage.getItem("username");
 
     const handlePost = (e) => {
         e.preventDefault();
@@ -23,6 +20,9 @@ export default function CreateBlog() {
             created_by: username,
             tags: tags,
         }).then((response) => {
+            if(response.err){
+                console.log(response.err)
+            }
             if (response.data.fail) {
                 alert(response.data.fail)
             }

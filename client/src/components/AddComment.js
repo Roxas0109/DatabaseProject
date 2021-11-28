@@ -2,19 +2,15 @@ import React, { useState } from 'react'
 import './AddComment.css'
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { useSelector } from 'react-redux';
-import { userSelector } from '../features/user/userSlice';
-import { useNavigate } from 'react-router-dom';
 
 
 
 export default function AddComment({blogid}) {
-    const navigate = useNavigate()
     const [show, setShow] = useState(false);
     const [sentiment, setSentiment] = useState(true);
     const [description, setDescription] = useState('');
 
-    const username = useSelector(userSelector);
+    const username = window.localStorage.getItem("username");
 
     const handleLike = () => {
         setSentiment(!sentiment);
@@ -40,6 +36,7 @@ export default function AddComment({blogid}) {
             }
             else {
                 alert(response.data.pass)
+                window.location.reload();
             }
         })
     }

@@ -30,9 +30,7 @@ export default function CommentBlog() {
 
     const sortComments = (currentId) => {
         const spComments = [];
-        console.log("inside")
         for (var i = 0; i < commentsList.length; i++) {
-            console.log(blogList[i])
             if (commentsList[i].blogid === currentId) {
                 spComments.push(commentsList[i])
             }
@@ -50,7 +48,6 @@ export default function CommentBlog() {
                 <p>{item.description}</p>
                 <p>Tags: {item.tags}</p>
                 {spComments.map((item) => {
-                    console.log(item)
                     return (
                         <div className="comments">
                             <div className="commentsWrapper">

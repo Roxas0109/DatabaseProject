@@ -25,7 +25,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.get('/api/get', (req, res) => {
     const sqlSelect = "SELECT * FROM student";
     db.query(sqlSelect, (err, result) => {
-        res.send(result)
+        return res.send(result)
     })
 });
 
@@ -42,7 +42,7 @@ app.post('/api/insert', (req, res) => {
     const dupUserErr = "for key 'PRIMARY'"
 
     if (password != passwordConfirm) {
-        res.send({ fail: { passFail: "Passwords do not match" } })
+        return res.send({ fail: { passFail: "Passwords do not match" } })
     }
 
     else {
@@ -51,16 +51,16 @@ app.post('/api/insert', (req, res) => {
 
             if (err) {
                 if (err.sqlMessage.includes(dupUserErr)) {
-                    res.send({ fail: { userFail: "Username already in use." } })
+                    return res.send({ fail: { userFail: "Username already in use." } })
                 }
 
                 else if (err.sqlMessage.includes(dupEmailErr)) {
-                    res.send({ fail: { emailFail: "E-mail already in use." } })
+                    return res.send({ fail: { emailFail: "E-mail already in use." } })
                 }
             }
 
             else {
-                res.send({ pass: "Registered!" })
+                return res.send({ pass: "Registered!" })
             }
 
         })
@@ -76,14 +76,14 @@ app.post('/api/login', (req, res) => {
     const sqlLogin = "SELECT * FROM users WHERE username=? AND password=?";
     db.query(sqlLogin, [username, password], (err, result) => {
         if (err) {
-            res.send({ err: err })
+            return res.send({ err: err })
         }
 
         if (result.length > 0) {
-            res.send({ pass: "Success!" });
+            return res.send({ pass: "Success!" });
         }
         else {
-            res.send({ fail: "Wrong username/password combination!" });
+            return res.send({ fail: "Wrong username/password combination!" });
         }
     })
 });
@@ -99,7 +99,7 @@ app.post('/api/addcomment', (req, res) => {
     const checkCount = "SELECT COUNT(*) AS count FROM comments WHERE posted_by = ? AND cdate = DATE(NOW())"
     db.query(checkCount, [posted_by], (err, result) => {
         if (err) {
-            res.send(err)
+            return res.send(err)
         } else {
             count = result[0].count
         }
@@ -108,7 +108,7 @@ app.post('/api/addcomment', (req, res) => {
     const query_created_by = "SELECT created_by FROM blogs WHERE blogid = ?"
     db.query(query_created_by, [blogid], (err, result) => {
         if (err) {
-            res.send(err)
+            return res.send(err)
         } else {
             created_by = result[0].created_by
         }
@@ -116,19 +116,19 @@ app.post('/api/addcomment', (req, res) => {
 
     setTimeout(() => {
         if (created_by == posted_by) {
-            res.send({ fail: { userFail: "Can't post on your own blog." } })
+            return res.send({ fail: { userFail: "Can't post on your own blog." } })
         } else if (count >= 3) {
-            res.send({ fail: { countFail: "Limit Exceeded" } })
+            return res.send({ fail: { countFail: "Limit Exceeded" } })
         }
         else {
             const sqlInsertC = "INSERT INTO comments (sentiment,description,posted_by,cdate,blogid) VALUES (?, ?, ?, DATE(NOW()), ?)";
             db.query(sqlInsertC, [sentiment.toString(), description, posted_by, blogid], (err, result) => {
 
                 if (err) {
-                    res.send(err)
+                    return res.send(err)
                 }
                 else {
-                    res.send({ pass: "posted" })
+                    return res.send({ pass: "posted" })
                 }
 
             })
@@ -140,7 +140,7 @@ app.post('/api/addcomment', (req, res) => {
 app.get('/api/getblogs', (req, res) => {
     const query = "SELECT b.*, GROUP_CONCAT(DISTINCT tag SEPARATOR ', ') AS tags FROM blogs AS b, blogstags AS t WHERE b.blogid = t.blogid GROUP BY t.blogid"
     db.query(query, (err, result) => {
-        res.send(result)
+        return res.send(result)
     })
 })
 
@@ -149,7 +149,7 @@ app.get('/api/getblogs', (req, res) => {
 app.get('/api/getcomments', (req, res) => {
     const query = "SELECT * FROM comments";
     db.query(query, (err, result) => {
-        res.send(result)
+        return res.send(result)
     })
 })
 
@@ -168,7 +168,7 @@ app.post('/api/createblog', (req, res) => {
 
     db.query(checkCount, [created_by], (err, result) => {
         if (err) {
-            res.send(err)
+            return res.send(err)
         }
 
         else {
@@ -183,8 +183,7 @@ app.post('/api/createblog', (req, res) => {
             db.query(query, [description, subject, created_by], (err, result) => {
 
                 if (err) {
-                    console.log("pizzaman")
-                    res.send({ err: err })
+                    return res.send(err)
                 }
 
                 else {
@@ -198,17 +197,16 @@ app.post('/api/createblog', (req, res) => {
                 setTimeout(() => {
                     db.query(queryTags, [id, tag], (err, result) => {
                         if (err) {
-                            res.send(err)
+                            return res.send(err)
                         }
                     })
-                }, 250)
+                }, 500)
             )
-
-            res.send({ pass: "Blog Created!" })
+            return res.send({ pass: "Blog Created!" })
         }
 
         else {
-            res.send({ fail: "User exceeded post limit (2)" })
+            return res.send({ fail: "User exceeded post limit (2)" })
         }
     }, 500)
 
@@ -229,10 +227,10 @@ app.get('/api/sqlIns', (req, res) => {
     setTimeout(() => {
         db.query(sqlQueries, (err, result) => {
             if (err) {
-                res.send({ err: err })
+                return res.send({ err: err })
             }
             else {
-                res.send(result);
+                return res.send(result);
             }
         })
     }, 1000);
