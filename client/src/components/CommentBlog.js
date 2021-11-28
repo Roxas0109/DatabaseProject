@@ -1,29 +1,63 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import axios from 'axios';
 import AddComment from './AddComment'
 import './CommentBlog.css'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export default function CommentBlog() {
 
-    const data = [
-        {
-            "Subject": "Lorem Ipsum",
-            "Description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Tellus cras adipiscing enim eu. Amet purus gravida quis blandit turpis cursus in. Nisl pretium fusce id velit ut tortor. Dolor magna eget est lorem ipsum. Turpis tincidunt id aliquet risus feugiat in ante metus dictum. Varius quam quisque id diam vel quam elementum pulvinar etiam. Mauris augue neque gravida in. Viverra orci sagittis eu volutpat odio facilisis mauris. Imperdiet massa tincidunt nunc pulvinar sapien et ligula ullamcorper. Rutrum tellus pellentesque eu tincidunt tortor aliquam nulla. Etiam dignissim diam quis enim lobortis scelerisque. Nec nam aliquam sem et tortor. Dui ut ornare lectus sit amet. Facilisis sed odio morbi quis commodo odio aenean sed.",
-            "Tags": "#Lorem #Ipsum #LoremIpsum"
-        },
-        {
-            "Subject": "Lorem Ipsum",
-            "Description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Tellus cras adipiscing enim eu. Amet purus gravida quis blandit turpis cursus in. Nisl pretium fusce id velit ut tortor. Dolor magna eget est lorem ipsum. Turpis tincidunt id aliquet risus feugiat in ante metus dictum. Varius quam quisque id diam vel quam elementum pulvinar etiam. Mauris augue neque gravida in. Viverra orci sagittis eu volutpat odio facilisis mauris. Imperdiet massa tincidunt nunc pulvinar sapien et ligula ullamcorper. Rutrum tellus pellentesque eu tincidunt tortor aliquam nulla. Etiam dignissim diam quis enim lobortis scelerisque. Nec nam aliquam sem et tortor. Dui ut ornare lectus sit amet. Facilisis sed odio morbi quis commodo odio aenean sed.",
-            "Tags": "#Lorem #Ipsum #LoremIpsum"
-        }
-    ]
+    const [blogList, setBlogList] = useState([])
+    const [commentsList, setCommentsList] = useState([])
 
-    const displayBlogs = data.map((item)=>{
+    useEffect(() => {
+        axios.get('http://localhost:3001/api/getblogs').then((response) => {
+            setBlogList(response.data)
+        });
+        axios.get('http://localhost:3001/api/getcomments').then((response) => {
+            setCommentsList(response.data)
+        });
+
+    }, [])
+
+    const likeIcon = (sentiment) => {
+        if (sentiment === 'positive' || sentiment === 'true') {
+            return (<FontAwesomeIcon icon="thumbs-up" />)
+        }
+        else {
+            return (<FontAwesomeIcon icon="thumbs-down" />)
+        }
+    }
+
+    const sortComments = (currentId) => {
+        const spComments = [];
+        for (var i = 0; i < commentsList.length; i++) {
+            if (commentsList[i].blogid === currentId) {
+                spComments.push(commentsList[i])
+            }
+        }
+
+        return spComments
+    }
+
+    const displayBlogs = blogList.map((item) => {
+        const spComments = sortComments(item.blogid)
         return (
             <div className="blogs">
-                <h3>{item.Subject}</h3>
-                <p>{item.Description}</p>
-                <p>{item.Tags}</p>
-                <AddComment/>
+                <h3>{item.subject}</h3>
+                <h4>Created by: {item.created_by}</h4>
+                <p>{item.description}</p>
+                <p>Tags: {item.tags}</p>
+                {spComments.map((item) => {
+                    return (
+                        <div className="comments">
+                            <div className="commentsWrapper">
+                                <h4>Posted by: {item.posted_by}</h4>
+                                <p>{likeIcon(item.sentiment)} {item.description}</p>
+                            </div>
+                        </div>
+                    )
+                })}
+                <AddComment blogid={item.blogid}/>
             </div>
         )
     })
@@ -31,7 +65,6 @@ export default function CommentBlog() {
     return (
         <div className="commentCont" >
             {displayBlogs}
-
         </div >
     )
 }
