@@ -60,7 +60,7 @@ export default function CommentBlog() {
                         </div>
                     )
                 })}
-                <AddComment />
+                <AddComment blogid={item.blogid}/>
             </div>
         )
     })

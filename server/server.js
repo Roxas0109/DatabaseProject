@@ -5,6 +5,7 @@ const app = express();
 const mysql = (require('mysql'));
 const fs = require('fs');
 const { response } = require('express');
+const { fail } = require('assert');
 
 const db = mysql.createPool({
     host: 'comp440dbserver.mysql.database.azure.com',
@@ -92,8 +93,10 @@ app.post('/api/addcomment', (req, res) => {
     const posted_by = req.body.posted_by
     const sentiment = req.body.sentiment
     const description = req.body.description
+    const blogid = req.body.blogid
     var count;
-    const checkCount = "SELECT COUNT(*) AS count FROM comments WHERE posted_by = ?"
+    var created_by;
+    const checkCount = "SELECT COUNT(*) AS count FROM comments WHERE posted_by = ? AND cdate = DATE(NOW())"
     db.query(checkCount, [posted_by], (err, result) => {
         if (err) {
             res.send(err)
@@ -101,10 +104,25 @@ app.post('/api/addcomment', (req, res) => {
             count = result[0].count
         }
     })
+
+    const query_created_by = "SELECT created_by FROM blogs WHERE blogid = ?"
+    db.query(query_created_by, [blogid], (err, result) => {
+        if (err) {
+            res.send(err)
+        } else {
+            created_by = result[0].created_by
+        }
+    })
+
     setTimeout(() => {
-        if (count < 3) {
+        if (created_by == posted_by) {
+            res.send({ fail: { userFail: "Can't post on your own blog." } })
+        } else if (count >= 3) {
+            res.send({ fail: { countFail: "Limit Exceeded" } })
+        }
+        else {
             const sqlInsertC = "INSERT INTO comments (sentiment,description,posted_by,cdate,blogid) VALUES (?, ?, ?, DATE(NOW()), ?)";
-            db.query(sqlInsertC, [sentiment.toString(), description, posted_by, 1], (err, result) => {
+            db.query(sqlInsertC, [sentiment.toString(), description, posted_by, blogid], (err, result) => {
 
                 if (err) {
                     res.send(err)
@@ -114,8 +132,6 @@ app.post('/api/addcomment', (req, res) => {
                 }
 
             })
-        } else {
-            res.send({ fail: { countFail: "Limit Exceeded" } })
         }
     }, 500);
 })
@@ -177,18 +193,18 @@ app.post('/api/createblog', (req, res) => {
 
             })
 
-                const queryTags = "INSERT INTO blogstags (blogid,tag) VALUES (?,?)"
-                tags.forEach(tag => 
-                    setTimeout(() => {
-                        db.query(queryTags, [id, tag], (err, result) => {
-                            if (err) {
-                                res.send(err)
-                            }
-                        })
-                    }, 250)
-                )
-    
-                res.send({ pass: "Blog Created!" })
+            const queryTags = "INSERT INTO blogstags (blogid,tag) VALUES (?,?)"
+            tags.forEach(tag =>
+                setTimeout(() => {
+                    db.query(queryTags, [id, tag], (err, result) => {
+                        if (err) {
+                            res.send(err)
+                        }
+                    })
+                }, 250)
+            )
+
+            res.send({ pass: "Blog Created!" })
         }
 
         else {

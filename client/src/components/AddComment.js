@@ -4,11 +4,12 @@ import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useSelector } from 'react-redux';
 import { userSelector } from '../features/user/userSlice';
+import { useNavigate } from 'react-router-dom';
 
 
 
-export default function AddComment() {
-
+export default function AddComment({blogid}) {
+    const navigate = useNavigate()
     const [show, setShow] = useState(false);
     const [sentiment, setSentiment] = useState(true);
     const [description, setDescription] = useState('');
@@ -26,10 +27,16 @@ export default function AddComment() {
             posted_by: username,
             sentiment: sentiment,
             description:description,
+            blogid:blogid,
         }).then((response) => {  
             console.log(response)                  
             if (response.data.fail) {
-                alert(response.data.fail.countFail)
+                if(response.data.fail.countFail){
+                    alert(response.data.fail.countFail)
+                }
+                if(response.data.fail.userFail){
+                    alert(response.data.fail.userFail)
+                }
             }
             else {
                 alert(response.data.pass)
