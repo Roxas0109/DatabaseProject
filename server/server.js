@@ -95,6 +95,8 @@ app.post('/api/addcomment', (req, res) => {
     const blogid = req.body.blogid
     var count;
     var created_by;
+    var alreadyPosted;
+
     const checkCount = "SELECT COUNT(*) AS count FROM comments WHERE posted_by = ? AND cdate = DATE(NOW())"
     db.query(checkCount, [posted_by], (err, result) => {
         if (err) {
@@ -113,11 +115,22 @@ app.post('/api/addcomment', (req, res) => {
         }
     })
 
+    const query_already_posted = "SELECT count(*) as count FROM comments WHERE blogid = ? AND posted_by = ?;"
+    db.query(query_already_posted, [blogid, posted_by], (err, result) => {
+        if (err) {
+            return res.send(err)
+        } else {
+            alreadyPosted = result[0].count
+        }
+    })
+
     setTimeout(() => {
         if (created_by == posted_by) {
-            return res.send({ fail: { userFail: "Can't post on your own blog." } })
+            return res.send({ fail: { userFail: "Can't post on your own blog!" } })
         } else if (count >= 3) {
-            return res.send({ fail: { countFail: "Limit Exceeded" } })
+            return res.send({ fail: { countFail: "User exceeded comment limit (3) per day!" } })
+        } else if (alreadyPosted >= 1){
+            return res.send({fail: {alreadyPosted: "Already added a comment to this post!"}})
         }
         else {
             const sqlInsertC = "INSERT INTO comments (sentiment,description,posted_by,cdate,blogid) VALUES (?, ?, ?, DATE(NOW()), ?)";
@@ -132,7 +145,7 @@ app.post('/api/addcomment', (req, res) => {
 
             })
         }
-    }, 500);
+    }, 700);
 })
 
 //RETRIEVE BLOGS WITH TAGS
@@ -205,7 +218,7 @@ app.post('/api/createblog', (req, res) => {
         }
 
         else {
-            return res.send({ fail: "User exceeded post limit (2)" })
+            return res.send({ fail: "User exceeded post limit (2) per day!" })
         }
     }, 500)
 

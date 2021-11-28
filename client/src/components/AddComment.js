@@ -33,6 +33,9 @@ export default function AddComment({blogid}) {
                 if(response.data.fail.userFail){
                     alert(response.data.fail.userFail)
                 }
+                if(response.data.fail.alreadyPosted){
+                    alert(response.data.fail.alreadyPosted)
+                }
             }
             else {
                 alert(response.data.pass)
