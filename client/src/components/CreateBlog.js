@@ -31,6 +31,7 @@ export default function CreateBlog() {
                 navigate('/home')
             }
         })
+    }
 
     return (
         <div className="createCont">
