@@ -31,7 +31,6 @@ export default function CreateBlog() {
                 navigate('/home')
             }
         })
-    }
 
     return (
         <div className="createCont">
@@ -40,13 +39,13 @@ export default function CreateBlog() {
                 <h3>Current User: {username}</h3>
                 <label>
                     <h3>Subject: </h3>
-                    <input type="text" onChange={(e)=>setSubject(e.target.value)}/></label>
+                    <input type="text" onChange={(e) => setSubject(e.target.value)} /></label>
                 <label>
                     <h3>Description: </h3>
-                    <textarea onChange={(e)=>setDescription(e.target.value)}/></label>
+                    <textarea onChange={(e) => setDescription(e.target.value)} /></label>
                 <label>
                     <h3>Tags: </h3>
-                    <input type="text" onChange={(e)=>setTags(e.target.value)}/></label>
+                    <input type="text" onChange={(e) => setTags(e.target.value)} /></label>
                 <button className="btn" onClick={handlePost}>Post</button>
             </div>
         </div>

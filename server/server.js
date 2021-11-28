@@ -37,7 +37,6 @@ app.post('/api/insert', (req, res) => {
     const firstName = req.body.firstName
     const lastName = req.body.lastName
     const email = req.body.email
-
     const dupEmailErr = "for key 'email_UNIQUE'"
     const dupUserErr = "for key 'PRIMARY'"
 
@@ -244,4 +243,3 @@ app.listen(3001, () => {
 });
 
 //for nodemon: npm run devStart
-
