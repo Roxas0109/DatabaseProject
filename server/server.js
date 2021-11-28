@@ -129,25 +129,75 @@ app.get('/api/getblogs', (req, res) => {
 })
 
 //RETRIEVE COMMENTS FOR SPECIFIC BLOG
-// app.post('/api/getcomments', (req, res) => {
-//     const blogid = req.body.blogid
 
-//     const query = "SELECT * FROM comments WHERE blogid = ?";
-//     db.query(query, [blogid], (err, result) => {
-//         if (err) {
-//             res.send(err)
-//         }
-//         else {
-//             res.send(result)
-//         }
-//     })
-// });
 app.get('/api/getcomments', (req, res) => {
     const query = "SELECT * FROM comments";
     db.query(query, (err, result) => {
         res.send(result)
     })
 })
+
+// CREATE BLOG
+
+app.post('/api/createblog', (req, res) => {
+    const description = req.body.description
+    const subject = req.body.subject
+    const created_by = req.body.created_by
+
+    const tags = req.body.tags.split(',')
+
+    let count;
+    let id;
+    const checkCount = "SELECT COUNT(*) AS count FROM blogs WHERE created_by = ? AND pdate = DATE(NOW())"
+
+    db.query(checkCount, [created_by], (err, result) => {
+        if (err) {
+            res.send(err)
+        }
+
+        else {
+            count = result[0].count
+        }
+    })
+
+    setTimeout(() => {
+
+        if (count < 2) {
+            const query = "INSERT INTO blogs (description,subject,pdate,created_by) VALUES (?, ?, DATE(NOW()), ?);SELECT LAST_INSERT_ID() AS id;"
+            db.query(query, [description, subject, created_by], (err, result) => {
+
+                if (err) {
+                    console.log("pizzaman")
+                    res.send({ err: err })
+                }
+
+                else {
+                    id = result[1][0].id
+                }
+
+            })
+
+                const queryTags = "INSERT INTO blogstags (blogid,tag) VALUES (?,?)"
+                tags.forEach(tag => 
+                    setTimeout(() => {
+                        db.query(queryTags, [id, tag], (err, result) => {
+                            if (err) {
+                                res.send(err)
+                            }
+                        })
+                    }, 250)
+                )
+    
+                res.send({ pass: "Blog Created!" })
+        }
+
+        else {
+            res.send({ fail: "User exceeded post limit (2)" })
+        }
+    }, 500)
+
+});
+
 
 //RUNNING SCRIPT
 app.get('/api/sqlIns', (req, res) => {
@@ -171,6 +221,8 @@ app.get('/api/sqlIns', (req, res) => {
         })
     }, 1000);
 
+
+
 })
 
 app.listen(3001, () => {
@@ -178,3 +230,4 @@ app.listen(3001, () => {
 });
 
 //for nodemon: npm run devStart
+
