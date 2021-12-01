@@ -90,9 +90,17 @@ app.post('/api/login', (req, res) => {
 //ADDING COMMENTS
 app.post('/api/addcomment', (req, res) => {
     const posted_by = req.body.posted_by
-    const sentiment = req.body.sentiment
     const description = req.body.description
     const blogid = req.body.blogid
+    const handleLike=()=>{
+        if(req.body.sentiment){
+            return "positive"
+        }
+        else{
+            return "negative"
+        }
+    }
+    const sentiment = handleLike()
     var count;
     var created_by;
     var alreadyPosted;
@@ -134,7 +142,7 @@ app.post('/api/addcomment', (req, res) => {
         }
         else {
             const sqlInsertC = "INSERT INTO comments (sentiment,description,posted_by,cdate,blogid) VALUES (?, ?, ?, DATE(NOW()), ?)";
-            db.query(sqlInsertC, [sentiment.toString(), description, posted_by, blogid], (err, result) => {
+            db.query(sqlInsertC, [sentiment, description, posted_by, blogid], (err, result) => {
 
                 if (err) {
                     return res.send(err)

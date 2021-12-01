@@ -20,7 +20,7 @@ export default function CommentBlog() {
     }, [])
 
     const likeIcon = (sentiment) => {
-        if (sentiment === 'positive' || sentiment === 'true') {
+        if (sentiment === 'positive') {
             return (<FontAwesomeIcon icon="thumbs-up" />)
         }
         else {
