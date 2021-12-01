@@ -16,6 +16,13 @@ import Content from './components/Content';
 import Home from './components/Home';
 import CreateBlog from './components/CreateBlog';
 import CommentBlog from './components/CommentBlog';
+import PositiveBlogs from './components/Phase3/PositiveBlogs';
+import Most from './components/Phase3/Most';
+import Followers from './components/Phase3/Followers';
+import NoBlogs from './components/Phase3/NoBlogs';
+import NegativeComments from './components/Phase3/NegativeComments';
+import NoNegative from './components/Phase3/NoNegative';
+
 
 function App() {
 
@@ -41,6 +48,14 @@ function App() {
 
             <Route path='createblog' element={<CreateBlog />} />
             <Route path='commentblog' element={<CommentBlog />} />
+            
+            <Route path='positiveblogs' element={<PositiveBlogs />} />
+            <Route path='most' element={<Most />} />
+            <Route path='followers' element={<Followers />} />
+            <Route path='noblogs' element={<NoBlogs />} />
+            <Route path='negativecomments' element={<NegativeComments />} />
+            <Route path='nonegative' element={<NoNegative />} />
+
           </Route>
         </Routes>
       </div>
