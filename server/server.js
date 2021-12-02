@@ -92,11 +92,11 @@ app.post('/api/addcomment', (req, res) => {
     const posted_by = req.body.posted_by
     const description = req.body.description
     const blogid = req.body.blogid
-    const handleLike=()=>{
-        if(req.body.sentiment){
+    const handleLike = () => {
+        if (req.body.sentiment) {
             return "positive"
         }
-        else{
+        else {
             return "negative"
         }
     }
@@ -137,8 +137,8 @@ app.post('/api/addcomment', (req, res) => {
             return res.send({ fail: { userFail: "Can't post on your own blog!" } })
         } else if (count >= 3) {
             return res.send({ fail: { countFail: "User exceeded comment limit (3) per day!" } })
-        } else if (alreadyPosted >= 1){
-            return res.send({fail: {alreadyPosted: "Already added a comment to this post!"}})
+        } else if (alreadyPosted >= 1) {
+            return res.send({ fail: { alreadyPosted: "Already added a comment to this post!" } })
         }
         else {
             const sqlInsertC = "INSERT INTO comments (sentiment,description,posted_by,cdate,blogid) VALUES (?, ?, ?, DATE(NOW()), ?)";
@@ -164,7 +164,7 @@ app.get('/api/getblogs', (req, res) => {
     })
 })
 
-//RETRIEVE COMMENTS FOR SPECIFIC BLOG
+//RETRIEVE COMMENTS FOR BLOGS
 
 app.get('/api/getcomments', (req, res) => {
     const query = "SELECT * FROM comments";
@@ -259,6 +259,91 @@ app.get('/api/sqlIns', (req, res) => {
 
 })
 
+//GET ALL POSTS WITH TAGS FOR SPECIFIC USER IN WHICH ALL COMMENTS ARE POSITIVE
+app.post('/api/getPositiveBlogs', (req, res) => {
+    const created_by = req.body.created_by
+    const query = "SELECT b.*, GROUP_CONCAT(DISTINCT tag SEPARATOR ',') AS tags FROM blogs AS b, comments AS c, blogstags AS t WHERE b.blogid = c.blogid AND b.blogid = t.blogid AND created_by=? GROUP BY b.blogid HAVING GROUP_CONCAT(DISTINCT sentiment SEPARATOR ',') = 'positive';"
+
+    db.query(query,[created_by],(err,response)=>{
+        if (err) {
+            res.send(err)
+        }
+        else {
+            console.log(response)
+            res.send(response)
+        }
+    })
+})
+
+//GET COMMENTS FOR POSITIVE BLOGS
+app.post('/api/getPositiveComments', (req, res) => {
+    const created_by = req.body.created_by
+    const query = "SELECT c.* FROM blogs AS b, comments AS c WHERE b.blogid = c.blogid AND sentiment = 'positive' AND created_by=?;"
+
+    db.query(query,[created_by],(err,response)=>{
+        if (err) {
+            res.send(err)
+        }
+        else {
+            console.log(response)
+            res.send(response)
+        }
+    })
+})
+
+//GET USERS THAT POSTED THE MOST BLOGS ON SPECIFIC DAY
+app.get('/api/getMostBlogs', (req, res) => {
+    const query = "SELECT created_by, MAX(num_posts) FROM (SELECT created_by, COUNT(*) as num_posts from blogs where pdate = '2021-12-02' group by created_by) as countblog;"
+    db.query(query, (err, result) => {
+        if (err) {
+            res.send(err)
+        }
+        else {
+            res.send(result)
+        }
+    })
+})
+
+//GET USERS THAT HAVE NOT POSTED ANY BLOGS
+app.get('/api/getUserNoBlog', (req, res) => {
+    const query = "SELECT DISTINCT username FROM users LEFT JOIN blogs ON username = created_by WHERE created_by IS NULL;"
+    db.query(query, (err, result) => {
+        if (err) {
+            res.send(err)
+        }
+        else {
+            res.send(result)
+        }
+    })
+})
+
+//GET USERS THAT HAVE ONLY POSTED NEGATIVE COMMENTS
+app.get('/api/getUserOnlyNeg', (req, res) => {
+    const query = "SELECT posted_by, GROUP_CONCAT(DISTINCT sentiment SEPARATOR ',') AS sentiments FROM comments GROUP BY posted_by HAVING sentiments = 'negative';"
+    db.query(query, (err, result) => {
+        if (err) {
+            res.send(err)
+        }
+        else {
+            res.send(result)
+        }
+    })
+})
+
+//GET USERS THAT HAVE NO NEGATIVE COMMENTS ON ANY BLOG
+app.get('/api/getNoNegativeComments', (req, res) => {
+    const query = "SELECT created_by, GROUP_CONCAT(DISTINCT sentiment SEPARATOR ',') AS sentiments FROM blogs AS b, comments AS c WHERE b.blogid = c.blogid GROUP BY created_by HAVING sentiments = 'positive';"
+    db.query(query, (err, result) => {
+        if (err) {
+            res.send(err)
+        }
+        else {
+            res.send(result)
+        }
+    })
+})
+
+//LISTENER
 app.listen(3001, () => {
     console.log('running on port 3001')
 });

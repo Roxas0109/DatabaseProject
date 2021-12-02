@@ -1,28 +1,29 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import axios from 'axios'
+import './phase3.css'
 
 export default function NegativeComments() {
 
     const [userList, setUserList] = useState([])
 
-    // useEffect(() => {
-    //     axios.get('http://localhost:3001/api/getnegativecomments').then(response=>{
-    //         setUserList(response.data)
-    //     })
-    // }, [])
+    useEffect(() => {
+        axios.get('http://localhost:3001/api/getUserOnlyNeg').then(response=>{
+            setUserList(response.data)
+        })
+    }, [])
 
     const displayUsers = userList.map(item => {
         return (
-            <div className="negUsers">
-                <h3>{item.username}</h3>
+            <div className="pUsers">
+                <h3>{item.posted_by}</h3>
             </div>
         )
     })
 
     return (
-        <div className='negCont'>
-            <div className="negWrapper">
-                <h1>Users with only negative comments</h1>
+        <div className='pCont'>
+            <div className="pWrapper">
+                <h1>Users who only post negative comments</h1>
                 {displayUsers}
             </div>
         </div>

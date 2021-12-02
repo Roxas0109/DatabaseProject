@@ -1,28 +1,29 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import axios from 'axios'
+import './phase3.css'
 
 export default function Most() {
 
     const [userList, setUserList] = useState([])
 
-    // useEffect(() => {
-    //     axios.get('http://localhost:3001/api/getmostblogs').then(response=>{
-    //         setUserList(response.data)
-    //     })
-    // }, [])
+    useEffect(() => {
+        axios.get('http://localhost:3001/api/getmostblogs').then(response=>{
+            setUserList(response.data)
+        })
+    }, [])
 
     const displayUsers = userList.map(item => {
         return (
-            <div className="mUsers">
-                <h3>{item.username}</h3>
+            <div className="pUsers">
+                <h3>{item.created_by}</h3>
             </div>
         )
     })
 
     return (
-        <div className='mCont'>
-            <div className="mWrapper">
-                <h1>Users with most blogs on: 10/10/2021</h1>
+        <div className='pCont'>
+            <div className="pWrapper">
+                <h1>Users with most blogs on: 12/2/2021</h1>
                 {displayUsers}
             </div>
         </div>
