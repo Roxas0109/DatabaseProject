@@ -20,6 +20,7 @@ export default function Login() {
                 alert(response.data.fail)
             }
             else {
+                console.log(response)
                 console.log(response.data.pass)
                 window.localStorage.setItem("username", username)
                 navigate('home')

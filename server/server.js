@@ -264,13 +264,13 @@ app.post('/api/getPositiveBlogs', (req, res) => {
     const created_by = req.body.created_by
     const query = "SELECT b.*, GROUP_CONCAT(DISTINCT tag SEPARATOR ',') AS tags FROM blogs AS b, comments AS c, blogstags AS t WHERE b.blogid = c.blogid AND b.blogid = t.blogid AND created_by=? GROUP BY b.blogid HAVING GROUP_CONCAT(DISTINCT sentiment SEPARATOR ',') = 'positive';"
 
-    db.query(query,[created_by],(err,response)=>{
+    db.query(query, [created_by], (err, response) => {
         if (err) {
-            res.send(err)
+            return res.send(err)
         }
         else {
             console.log(response)
-            res.send(response)
+            return res.send(response)
         }
     })
 })
@@ -280,13 +280,33 @@ app.post('/api/getPositiveComments', (req, res) => {
     const created_by = req.body.created_by
     const query = "SELECT c.* FROM blogs AS b, comments AS c WHERE b.blogid = c.blogid AND sentiment = 'positive' AND created_by=?;"
 
-    db.query(query,[created_by],(err,response)=>{
+    db.query(query, [created_by], (err, response) => {
         if (err) {
-            res.send(err)
+            return res.send(err)
         }
         else {
             console.log(response)
-            res.send(response)
+            return res.send(response)
+        }
+    })
+})
+
+//GET USER WHO IS FOLLOWED BY TWO OTHER USERS
+app.post('/api/getFollowed', (req, res) => {
+    const user1 = '%' + req.body.user1 + '%'
+    const user2 = '%' + req.body.user2 + '%'
+    const query = "SELECT leadername, GROUP_CONCAT(DISTINCT followername SEPARATOR ',') AS followers FROM follows GROUP BY leadername HAVING followers LIKE ? AND followers LIKE ?;"
+    db.query(query, [user1, user2], (err, response) => {
+        if (err) {
+            return res.send(err)
+        }
+        else {
+            if (response.length > 0) {
+                return res.send(response)
+            }
+            else {
+                return res.send([{leadername: "No Users Found!"}])
+            }
         }
     })
 })
@@ -296,10 +316,10 @@ app.get('/api/getMostBlogs', (req, res) => {
     const query = "SELECT created_by, MAX(num_posts) FROM (SELECT created_by, COUNT(*) as num_posts from blogs where pdate = '2021-12-02' group by created_by) as countblog;"
     db.query(query, (err, result) => {
         if (err) {
-            res.send(err)
+            return res.send(err)
         }
         else {
-            res.send(result)
+            return res.send(result)
         }
     })
 })
@@ -309,10 +329,10 @@ app.get('/api/getUserNoBlog', (req, res) => {
     const query = "SELECT DISTINCT username FROM users LEFT JOIN blogs ON username = created_by WHERE created_by IS NULL;"
     db.query(query, (err, result) => {
         if (err) {
-            res.send(err)
+            return res.send(err)
         }
         else {
-            res.send(result)
+            return res.send(result)
         }
     })
 })
@@ -322,10 +342,10 @@ app.get('/api/getUserOnlyNeg', (req, res) => {
     const query = "SELECT posted_by, GROUP_CONCAT(DISTINCT sentiment SEPARATOR ',') AS sentiments FROM comments GROUP BY posted_by HAVING sentiments = 'negative';"
     db.query(query, (err, result) => {
         if (err) {
-            res.send(err)
+            return res.send(err)
         }
         else {
-            res.send(result)
+            return res.send(result)
         }
     })
 })
@@ -335,10 +355,10 @@ app.get('/api/getNoNegativeComments', (req, res) => {
     const query = "SELECT created_by, GROUP_CONCAT(DISTINCT sentiment SEPARATOR ',') AS sentiments FROM blogs AS b, comments AS c WHERE b.blogid = c.blogid GROUP BY created_by HAVING sentiments = 'positive';"
     db.query(query, (err, result) => {
         if (err) {
-            res.send(err)
+            return res.send(err)
         }
         else {
-            res.send(result)
+            return res.send(result)
         }
     })
 })
