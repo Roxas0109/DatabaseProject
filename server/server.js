@@ -264,13 +264,13 @@ app.post('/api/getPositiveBlogs', (req, res) => {
     const created_by = req.body.created_by
     const query = "SELECT b.*, GROUP_CONCAT(DISTINCT tag SEPARATOR ',') AS tags FROM blogs AS b, comments AS c, blogstags AS t WHERE b.blogid = c.blogid AND b.blogid = t.blogid AND created_by=? GROUP BY b.blogid HAVING GROUP_CONCAT(DISTINCT sentiment SEPARATOR ',') = 'positive';"
 
-    db.query(query, [created_by], (err, response) => {
+    db.query(query, [created_by], (err, result) => {
         if (err) {
             return res.send(err)
         }
         else {
-            if (response.length > 0) {
-                return res.send(response)
+            if (result.length > 0) {
+                return res.send(result)
             }
             else {
                 return res.send([{subject: "No Users Found!"}])
@@ -284,12 +284,12 @@ app.post('/api/getPositiveComments', (req, res) => {
     const created_by = req.body.created_by
     const query = "SELECT c.* FROM blogs AS b, comments AS c WHERE b.blogid = c.blogid AND sentiment = 'positive' AND created_by=?;"
 
-    db.query(query, [created_by], (err, response) => {
+    db.query(query, [created_by], (err, result) => {
         if (err) {
             return res.send(err)
         }
         else {
-            return res.send(response)
+            return res.send(result)
         }
     })
 })
@@ -299,13 +299,13 @@ app.post('/api/getFollowed', (req, res) => {
     const user1 = '%' + req.body.user1 + '%'
     const user2 = '%' + req.body.user2 + '%'
     const query = "SELECT leadername, GROUP_CONCAT(DISTINCT followername SEPARATOR ',') AS followers FROM follows GROUP BY leadername HAVING followers LIKE ? AND followers LIKE ?;"
-    db.query(query, [user1, user2], (err, response) => {
+    db.query(query, [user1, user2], (err, result) => {
         if (err) {
             return res.send(err)
         }
         else {
-            if (response.length > 0) {
-                return res.send(response)
+            if (result.length > 0) {
+                return res.send(result)
             }
             else {
                 return res.send([{leadername: "No Users Found!"}])
@@ -322,7 +322,12 @@ app.get('/api/getMostBlogs', (req, res) => {
             return res.send(err)
         }
         else {
-            return res.send(result)
+            if (result.length > 0) {
+                return res.send(result)
+            }
+            else {
+                return res.send([{created_by: "No Users Found!"}])
+            }
         }
     })
 })
@@ -335,7 +340,12 @@ app.get('/api/getUserNoBlog', (req, res) => {
             return res.send(err)
         }
         else {
-            return res.send(result)
+            if (result.length > 0) {
+                return res.send(result)
+            }
+            else {
+                return res.send([{username: "No Users Found!"}])
+            }
         }
     })
 })
@@ -348,7 +358,12 @@ app.get('/api/getUserOnlyNeg', (req, res) => {
             return res.send(err)
         }
         else {
-            return res.send(result)
+            if (result.length > 0) {
+                return res.send(result)
+            }
+            else {
+                return res.send([{posted_by: "No Users Found!"}])
+            }
         }
     })
 })
@@ -361,7 +376,12 @@ app.get('/api/getNoNegativeComments', (req, res) => {
             return res.send(err)
         }
         else {
-            return res.send(result)
+            if (result.length > 0) {
+                return res.send(result)
+            }
+            else {
+                return res.send([{created_by: "No Users Found!"}])
+            }
         }
     })
 })
