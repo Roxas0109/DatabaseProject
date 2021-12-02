@@ -61,3 +61,16 @@
     margin-right: auto;
     margin-top: 20px;
 }
+
+.pbBlogs{
+    border-color: #D22030;
+    border-style: solid;
+    box-shadow: 0 8px 12px 0 rgba(0, 0, 0, 0.4);
+    border-radius: 25px;
+    width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    background: whitesmoke;
+}

@@ -269,8 +269,12 @@ app.post('/api/getPositiveBlogs', (req, res) => {
             return res.send(err)
         }
         else {
-            console.log(response)
-            return res.send(response)
+            if (response.length > 0) {
+                return res.send(response)
+            }
+            else {
+                return res.send([{subject: "No Users Found!"}])
+            }
         }
     })
 })
@@ -285,7 +289,6 @@ app.post('/api/getPositiveComments', (req, res) => {
             return res.send(err)
         }
         else {
-            console.log(response)
             return res.send(response)
         }
     })

@@ -50,7 +50,7 @@ export default function PositiveBlogs() {
     const displayBlogs = blogsList.map((item) => {
         const spComments = sortComments(item.blogid)
         return (
-            <div className="blogs">
+            <div className="pbBlogs">
                 <h3>{item.subject}</h3>
                 <h4>Created by: {item.created_by}</h4>
                 <p>{item.description}</p>
@@ -70,24 +70,21 @@ export default function PositiveBlogs() {
     })
 
     return (
-        <div className='pbCont'>
-            <div className="pbWrapper">
-                <h1>Blogs of specific user that only has positive comments</h1>
-                <h3>Enter Username:</h3>
-                <label> <b>Username</b> <input onChange={(e) => {
-                    setUsername(e.target.value)
-                }} /></label>
-                <button className='btn' onClick={() => {
-                    getPositiveBlogs()
-                    getComments()
-                    setTimeout(()=>{
-                        displayBlogs()
-                    }, 1000)
-                }}>Find Blogs</button>
-
-
-
+        <>
+            <div className='pbCont'>
+                <div className="pbWrapper">
+                    <h1>Blogs of specific user that only has positive comments</h1>
+                    <h3>Enter Username:</h3>
+                    <label> <b>Username</b> <input onChange={(e) => {
+                        setUsername(e.target.value)
+                    }} /></label>
+                    <button className='btn' onClick={() => {
+                        getPositiveBlogs()
+                        getComments()
+                    }}>Find Blogs</button>
+                </div>
             </div>
-        </div>
+            {displayBlogs}
+        </>
     )
 }
