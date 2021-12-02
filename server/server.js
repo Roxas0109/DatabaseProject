@@ -296,9 +296,9 @@ app.post('/api/getPositiveComments', (req, res) => {
 
 //GET USER WHO IS FOLLOWED BY TWO OTHER USERS
 app.post('/api/getFollowed', (req, res) => {
-    const user1 = '%' + req.body.user1 + '%'
-    const user2 = '%' + req.body.user2 + '%'
-    const query = "SELECT leadername, GROUP_CONCAT(DISTINCT followername SEPARATOR ',') AS followers FROM follows GROUP BY leadername HAVING followers LIKE ? AND followers LIKE ?;"
+    const user1 = '[[:<:]]' + req.body.user1 + '[[:>:]]'
+    const user2 = '[[:<:]]' + req.body.user2 + '[[:>:]]'
+    const query = "SELECT leadername, GROUP_CONCAT(DISTINCT followername SEPARATOR ', ') AS followers FROM follows GROUP BY leadername HAVING followers REGEXP ? AND followers REGEXP ?;"
     db.query(query, [user1, user2], (err, result) => {
         if (err) {
             return res.send(err)
