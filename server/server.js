@@ -316,7 +316,7 @@ app.post('/api/getFollowed', (req, res) => {
 
 //GET USERS THAT POSTED THE MOST BLOGS ON SPECIFIC DAY
 app.get('/api/getMostBlogs', (req, res) => {
-    const query = "SELECT created_by, MAX(num_posts) FROM (SELECT created_by, COUNT(*) as num_posts from blogs where pdate = '2021-12-02' group by created_by) as countblog;"
+    const query = "SELECT created_by FROM blogs where pdate ='2021-12-02' group by created_by having count(*) = (Select MAX(num_posts) FROM (SELECT COUNT(*) as num_posts from blogs where pdate = '2021-12-02' group by created_by) as countblog);"
     db.query(query, (err, result) => {
         if (err) {
             return res.send(err)

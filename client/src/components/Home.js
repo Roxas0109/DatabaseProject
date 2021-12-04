@@ -25,7 +25,7 @@ export default function Home() {
                     <button className="btn">Positive Blogs</button>
                 </Link>
                 <Link to='most'>
-                    <button className="btn">Most blogs on 10/10/2021</button>
+                    <button className="btn">Most blogs on 12/02/2021</button>
                 </Link>
                 <Link to='followers'>
                     <button className="btn">Followers</button>

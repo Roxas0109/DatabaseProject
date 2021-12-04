@@ -23,7 +23,7 @@ export default function Most() {
     return (
         <div className='pCont'>
             <div className="pWrapper">
-                <h1>Users with most blogs on: 12/2/2021</h1>
+                <h1>Users with most blogs on: 12/02/2021</h1>
                 {displayUsers}
             </div>
         </div>
